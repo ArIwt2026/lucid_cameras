@@ -34,6 +34,14 @@ host` is intentional: GigE Vision discovery and high-rate UDP image traffic
 must reach the physical interface directly.
 
 Before starting ROS, verify the cameras with ArenaView or the Arena SDK
+
+The persistent host ARP policy is stored in `config/99-lucid-camera-arp.conf`.
+Install it as `/etc/sysctl.d/99-lucid-camera-arp.conf` on a fresh host, then
+reload it with `sysctl -p /etc/sysctl.d/99-lucid-camera-arp.conf`.
+
+The project uses ROS domain 0, CycloneDDS, and `config/cyclonedds.xml` for ROS
+traffic. Start both camera nodes with `docker compose up -d`; the Triton raw
+Bayer stream is debayered to `/lucid/triton/image_color`.
 examples on the host. Then, inside the container:
 
 ```bash
