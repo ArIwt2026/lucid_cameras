@@ -1,0 +1,21 @@
+services:
+  lucid_ros2:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    image: lucid-ros2-humble:local
+    network_mode: host
+    ipc: host
+    environment:
+      - ROS_DOMAIN_ID=0
+      - RMW_IMPLEMENTATION=rmw_cyclonedds_cpp
+      - CYCLONEDDS_URI=file:///config/cyclonedds.xml
+      - DISPLAY=:1
+      - QT_X11_NO_MITSHM=1
+    volumes:
+      - ./config:/config
+      - ./data:/data
+      - /tmp/.X11-unix:/tmp/.X11-unix:rw
+    command: ["/start_cameras.sh"]
+    stdin_open: true
+    tty: true

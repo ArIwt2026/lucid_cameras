@@ -1,0 +1,12 @@
+vendor/*.tar.gz
+vendor/*.zip
+data/*
+!data/.gitkeep
+build/
+install/
+log/
+.env
+ptp_enable
+ptp_save
+persist.json
+*.png
