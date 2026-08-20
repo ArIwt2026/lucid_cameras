@@ -6,6 +6,8 @@ build/
 install/
 log/
 .env
+host_ros_ws/
+snapshot_topics.py
 ptp_enable
 ptp_save
 persist.json
