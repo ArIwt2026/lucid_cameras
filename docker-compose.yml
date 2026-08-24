@@ -13,7 +13,7 @@ services:
       - DISPLAY=:1
       - QT_X11_NO_MITSHM=1
     volumes:
-      - ./config:/config
+      - ../cyclonedds.xml:/config/cyclonedds.xml:ro
       - ./data:/data
       - /tmp/.X11-unix:/tmp/.X11-unix:rw
     command: ["/start_cameras.sh"]

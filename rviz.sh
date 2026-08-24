@@ -8,7 +8,7 @@ else
   exit 1
 fi
 
-HOST_WS="/home/iwtros/Documents/ar/thesis/host_ros_ws"
+HOST_WS="/home/iwtros/Documents/ar/lucid_cameras/host_ros_ws"
 if [ -f "$HOST_WS/install/setup.bash" ]; then
   source "$HOST_WS/install/setup.bash"
 fi
@@ -16,6 +16,7 @@ fi
 # Match the camera container's ROS 2 middleware settings.
 export ROS_DOMAIN_ID=0
 export RMW_IMPLEMENTATION=rmw_cyclonedds_cpp
+export CYCLONEDDS_URI="file:///home/iwtros/Documents/ar/cyclonedds.xml"
 
 # Use the current desktop display; fall back to an available local X11 socket
 # when this script is launched from a shell with a stale DISPLAY value.
@@ -33,7 +34,7 @@ if [ -z "${DISPLAY:-}" ]; then
   exit 1
 fi
 
-RVIZ_CONFIG="/home/iwtros/Documents/ar/thesis/config/lucid_cameras.rviz"
+RVIZ_CONFIG="/home/iwtros/Documents/ar/lucid_cameras/config/lucid_cameras.rviz"
 test -f "$RVIZ_CONFIG" || { echo "RViz config not found: $RVIZ_CONFIG" >&2; exit 1; }
 
 exec rviz2 -d "$RVIZ_CONFIG"
