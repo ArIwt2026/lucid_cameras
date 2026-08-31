@@ -29,6 +29,11 @@ ros2 run image_proc debayer_node --ros-args \
   -r image_color:=/lucid/triton/image_color &
 debayer_pid=$!
 
-trap 'kill "$triton_pid" "$helios_pid" "$debayer_pid" 2>/dev/null || true' EXIT INT TERM
-wait -n "$triton_pid" "$helios_pid" "$debayer_pid"
+python3 /publish_calibration.py &
+calibration_pid=$!
+
+trap 'kill "$triton_pid" "$helios_pid" "$debayer_pid" "$calibration_pid" 2>/dev/null || true' EXIT INT TERM
+# Keep the Triton stream and calibration publisher alive even if the optional
+# Helios node exits because its current camera profile rejects a setting.
+wait "$triton_pid" "$debayer_pid" "$calibration_pid"
 exit $?

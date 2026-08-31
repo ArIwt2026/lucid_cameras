@@ -26,6 +26,7 @@ WORKDIR /ros2_ws
 RUN git clone --depth 1 --branch v1.3 https://github.com/lucidvisionlabs/arena_camera_ros2.git /tmp/arena_camera_ros2 \
     && cp -a /tmp/arena_camera_ros2/ros2_ws/src/. src/ \
     && sed -i 's/, True)/, true)/g' src/arena_camera_node/src/ArenaCameraNode.cpp \
+    && sed -i 's/image_msg.header.frame_id = std::to_string(pImage->GetFrameId());/image_msg.header.frame_id = topic_.find("triton") != std::string::npos ? "lucid_triton_color_optical_frame" : "lucid_helios_depth_optical_frame";/' src/arena_camera_node/src/ArenaCameraNode.cpp \
     && sed -i 's/Arena::ExecuteNode(nodemap, "UserSetLoad");/\/\/ Keep the camera startup User Set selected by the device; do not reload factory Default./' src/arena_camera_node/src/ArenaCameraNode.cpp \
     && sed -i '/set_nodes_exposure_();/a\  try { auto nodemap = m_pDevice->GetNodeMap(); Arena::SetNodeValue<bool>(nodemap, "AcquisitionFrameRateEnable", true); Arena::SetNodeValue<double>(nodemap, "AcquisitionFrameRate", 30.0); log_info("Acquisition frame rate limited to 30 FPS"); } catch (...) { log_warn("Could not write acquisition frame rate; using the camera-saved rate"); }' src/arena_camera_node/src/ArenaCameraNode.cpp \
     && sed -i '/m_pDevice->StartStream();/i\  try {\n    auto nodemap = m_pDevice->GetNodeMap();\n    Arena::SetNodeValue<int64_t>(nodemap, "GevSCPSPacketSize", 1500);\n  } catch (const std::exception& e) {\n    log_warn(std::string("Could not set GevSCPSPacketSize: ") + e.what());\n  }' src/arena_camera_node/src/ArenaCameraNode.cpp \
@@ -37,8 +38,10 @@ RUN source /opt/ros/humble/setup.bash && \
 COPY docker/entrypoint.sh /entrypoint.sh
 COPY rviz.sh /rviz.sh
 COPY docker/start_cameras.sh /start_cameras.sh
+COPY docker/publish_calibration.py /publish_calibration.py
 RUN chmod +x /entrypoint.sh
 RUN chmod +x /rviz.sh
 RUN chmod +x /start_cameras.sh
+RUN chmod +x /publish_calibration.py
 ENTRYPOINT ["/entrypoint.sh"]
 CMD ["/start_cameras.sh"]
