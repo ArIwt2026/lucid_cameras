@@ -8,17 +8,29 @@ export ROS_DOMAIN_ID="${ROS_DOMAIN_ID:-0}"
 export RMW_IMPLEMENTATION="${RMW_IMPLEMENTATION:-rmw_cyclonedds_cpp}"
 
 ros2 run arena_camera_node start --ros-args \
+  -r __node:=triton_camera \
   -p 'serial:="240601768"' \
   -p topic:=/lucid/triton/image_raw \
   -p pixelformat:=bayer_rggb8 \
+  -p binning:=2 \
+  -p gain:=19.0 \
+  -p gamma:=0.5 \
   -p qos_reliability:=best_effort &
 triton_pid=$!
 
+sleep 2
+
 ros2 run arena_camera_node start --ros-args \
+  -r __node:=helios_camera \
   -p 'serial:="240901256"' \
   -p topic:=/lucid/helios/image_raw \
   -p pixelformat:=mono16 \
-  -p qos_reliability:=reliable &
+  -p scan3d_operating_mode:=Distance1250mmSingleFreq \
+  -p exposure_time_selector:=Exp250Us \
+  -p scan3d_distance_min:=0 \
+  -p scan3d_spatial_filter:=true \
+  -p scan3d_confidence_threshold_min:=150 \
+  -p qos_reliability:=best_effort &
 helios_pid=$!
 
 # Convert Triton's raw Bayer stream to a standard color image in ROS.

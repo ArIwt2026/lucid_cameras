@@ -16,6 +16,8 @@ services:
       - ../cyclonedds.xml:/config/cyclonedds.xml:ro
       - ./data:/data
       - /tmp/.X11-unix:/tmp/.X11-unix:rw
-    command: ["/start_cameras.sh"]
+      - ./docker/start_cameras.sh:/start_cameras.sh:ro
+      - ./docker/publish_calibration.py:/publish_calibration.py:ro
+    command: ["bash", "/start_cameras.sh"]
     stdin_open: true
     tty: true
