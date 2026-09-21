@@ -13,8 +13,8 @@ ros2 run arena_camera_node start --ros-args \
   -p topic:=/lucid/triton/image_raw \
   -p pixelformat:=bayer_rggb8 \
   -p binning:=2 \
-  -p gain:=19.0 \
-  -p gamma:=0.5 \
+  -p gain:=0.0 \
+  -p gamma:=0.01 \
   -p qos_reliability:=best_effort &
 triton_pid=$!
 
