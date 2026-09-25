@@ -14,7 +14,7 @@ ros2 run arena_camera_node start --ros-args \
   -p pixelformat:=bayer_rggb8 \
   -p binning:=2 \
   -p gain:=0.0 \
-  -p gamma:=0.01 \
+  -p gamma:=0.5 \
   -p qos_reliability:=best_effort &
 triton_pid=$!
 
